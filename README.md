@@ -6,11 +6,11 @@ With this device and a *ceramic heater*, you can maintain a certain *temperature
 
 ## Heater control unit
 
-![Heater control unit image]()
+![Heater control unit image](https://github.com/IhorAntiukhov/Smart-Heater-ESP8266/blob/main/images/IMG_20220926_104837.jpg)
 
 ## Ceramic heater
 
-![Ceramic heater image]()
+![Ceramic heater image](https://github.com/IhorAntiukhov/Smart-Heater-ESP8266/blob/main/images/IMG_20220926_105239.jpg)
 
 ## Components needed to create a device
 
