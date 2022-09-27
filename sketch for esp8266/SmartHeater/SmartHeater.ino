@@ -292,7 +292,7 @@ void loop() {
     server.handleClient();
   } else {
     // прочитываем и отправляем температуру
-    if ((millis() - getTemperatureIntervalMillis >= getTemperatureInterval * 60000) || getTemperatureIntervalMillis == 0) {
+    if ((millis() - getTemperatureIntervalMillis >= getTemperatureInterval * 60000) || getTemperatureIntervalMillis == 0 || isTemperatureModeStartedNow) {
       short currentTemperature = helper.getTemperatureC(sensor, MAX_GET_TEMPERATURE_ATTEMPTS);
       if (currentTemperature >= -10) {
         temperature = currentTemperature;
@@ -314,12 +314,13 @@ void loop() {
 
         if (!Firebase.setBool(firebaseData, ("/" + firebaseAuth.token.uid + "/isHeaterStarted").c_str(), temperatureModePhase))
           Serial.println("Не удалось записать в Firebase то, что обогреватель запущен/остановлен :( Причина: " + String(firebaseData.errorReason().c_str()));
-
-        temperatureSavedInFirebase = true;
-        if (!Firebase.setInt(firebaseData, ("/" + firebaseAuth.token.uid + "/temperature").c_str(), temperature))
-          Serial.println("Не удалось записать температуру в Firebase :( Причина: " + String(firebaseData.errorReason().c_str()));
-        temperatureSavedInFirebase = false;
       }
+
+      temperatureSavedInFirebase = true;
+      if (!Firebase.setInt(firebaseData, ("/" + firebaseAuth.token.uid + "/temperature").c_str(), temperature))
+        Serial.println("Не удалось записать температуру в Firebase :( Причина: " + String(firebaseData.errorReason().c_str()));
+      temperatureSavedInFirebase = false;
+
       getTemperatureIntervalMillis = millis();
     }
 
