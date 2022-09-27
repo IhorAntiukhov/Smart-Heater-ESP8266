@@ -2,7 +2,7 @@
 
 With this device and a *ceramic heater*, you can maintain a certain *temperature*, or make the heater turn on and off *at a time*. To control the heater via the Internet, I developed an *Android app*. For this project, I modeled the case for *3D printing*. **More information in the video below**.
 
-[![Video about my project on YouTube]()]()
+[![Video about my project on YouTube](https://img.youtube.com/vi/4tR2fXaSKr4/0.jpg)](https://youtu.be/4tR2fXaSKr4)
 
 ## Heater control unit
 
