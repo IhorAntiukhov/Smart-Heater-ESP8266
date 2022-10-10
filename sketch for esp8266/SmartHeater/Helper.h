@@ -1,3 +1,4 @@
+#include "wl_definitions.h"
 class Helper {
   public:
     // метод для того, чтобы определить, есть ли изменение данных, полученных из Firebase и записать текущее и предыдущее значение в разные переменные
@@ -127,8 +128,8 @@ class Helper {
       firebaseStream.setBSSLBufferSize(2048, 512);
 
       // устанавливаем слушатель изменения данных в Firebase
-      if (Firebase.beginMultiPathStream(firebaseStream, (firebaseAuth.token.uid).c_str())) {
-        Firebase.setMultiPathStreamCallback(firebaseStream, firebaseStreamCallback, firebaseStreamTimeoutCallback);
+      if (Firebase.RTDB.beginMultiPathStream(&firebaseStream, (firebaseAuth.token.uid).c_str())) {
+        Firebase.RTDB.setMultiPathStreamCallback(&firebaseStream, firebaseStreamCallback, firebaseStreamTimeoutCallback);
       } else {
         Serial.printf("Не удалось установить слушатель изменения данных в Firebase, %s\n", firebaseStream.errorReason().c_str());
         ESP.restart();
@@ -153,27 +154,20 @@ class Helper {
       return temperature;
     }
 
-    // метод для получения времени от NTP сервера
-    void getFormatTime(NTPClient timeClient, short &hours, short &minutes, String &formattedHours, String &formattedMinutes) {
-      if (WiFi.status() == WL_CONNECTED) {
-        timeClient.update(); // обновляем время
-        int notFormattedHours = timeClient.getHours();
-        int notFormattedMinutes = timeClient.getMinutes();
-        formattedHours = String(notFormattedHours);
-        formattedMinutes = String(notFormattedMinutes);
-      } else { // если нет подключения к WiFi сети, считаем время вручную
-        minutes++;
-        if (minutes >= 60) {
-          hours++;
-          minutes = 0;
-        }
-        if (hours == 24) {
-          hours = 0;
-          minutes = 0;
-        }
-        formattedHours = String(hours);
-        formattedMinutes = String(minutes);
+    // метод для вычисления времени
+    void getFormatTime(short &hours, short &minutes, String &formattedHours, String &formattedMinutes) {
+      minutes++;
+      if (minutes == 60) {
+        hours++;
+        minutes = 0;
       }
+      if (hours == 24) {
+        hours = 0;
+        minutes = 0;
+      }
+
+      formattedHours = String(hours);
+      formattedMinutes = String(minutes);
 
       // форматируем часы и минуты (формат ММ:ЧЧ)
       if (formattedHours.toInt() < 10) {
@@ -182,5 +176,7 @@ class Helper {
       if (formattedMinutes.toInt() < 10) {
         formattedMinutes = "0" + formattedMinutes;
       }
+
+      Serial.println("Текущее время: " + String(formattedHours) + ":" + String(formattedMinutes));
     }
 };
